@@ -4,18 +4,18 @@ namespace ServerInfoAPI.Types
 {
     public struct MemoryInfo
     {
-        public ulong MemTotal;
-        public ulong MemFree;
-        public ulong MemAvailable;
-        public ulong Buffers;
-        public ulong Cached;
-        public ulong SwapCached;
-        public ulong Active;
-        public ulong Inactive;
-        public ulong SwapTotal;
-        public ulong SwapFree;
-        public ulong Dirty;
-        public ulong Mapped;
-        public ulong Shmem;
+        public ulong MemTotal { get; set; }
+        public ulong MemFree { get; set; }
+        public ulong MemAvailable { get; set; }
+        public ulong Buffers { get; set; }
+        public ulong Cached { get; set; }
+        public ulong SwapCached { get; set; }
+        public ulong Active { get; set; }
+        public ulong Inactive { get; set; }
+        public ulong SwapTotal { get; set; }
+        public ulong SwapFree { get; set; }
+        public ulong Dirty { get; set; }
+        public ulong Mapped { get; set; }
+        public ulong Shmem { get; set; }
     }
 }

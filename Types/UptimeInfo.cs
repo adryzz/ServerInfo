@@ -8,8 +8,8 @@ namespace ServerInfoAPI.Types
 {
     public struct UptimeInfo
     {
-        public DateTime Time;
-        public DateTime StartupTime;
-        public TimeSpan Uptime;
+        public DateTime Time { get; set; }
+        public DateTime StartupTime { get; set; }
+        public TimeSpan Uptime { get; set; }
     }
 }

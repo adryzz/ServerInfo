@@ -25,17 +25,17 @@ namespace ServerInfoAPI.Types
             TransmitSpeed = 0;
             ReceiveSpeed = 0;
         }
-        public string Id;
-        public string Name;
-        public string Description;
-        public OperationalStatus OperationalStatus;
-        public long Speed;
-        public NetworkInterfaceType NetworkInterfaceType;
-        public bool IsReceiveOnly;
-        public bool SupportsMulticast;
-        public ulong SentBytes;
-        public ulong ReceivedBytes;
-        public long TransmitSpeed;
-        public long ReceiveSpeed;
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public OperationalStatus OperationalStatus { get; set; }
+        public long Speed { get; set; }
+        public NetworkInterfaceType NetworkInterfaceType { get; set; }
+        public bool IsReceiveOnly { get; set; }
+        public bool SupportsMulticast { get; set; }
+        public ulong SentBytes { get; set; }
+        public ulong ReceivedBytes { get; set; }
+        public long TransmitSpeed { get; set; }
+        public long ReceiveSpeed { get; set; }
     }
 }
