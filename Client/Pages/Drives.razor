@@ -6,8 +6,6 @@
 
 <h1>Mounted drives</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
-
 @if (drives == null)
 {
     <p><em>Loading...</em></p>
@@ -26,7 +24,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var i in drives.Where(x => x.DriveType == DriveType.Fixed))
+            @foreach (var i in drives.Where(x => x.DriveType == DriveType.Fixed || x.DriveType == DriveType.Network || x.DriveType == DriveType.Removable))
             {
                 <tr>
                     <td>@i.Name</td>
