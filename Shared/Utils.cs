@@ -51,5 +51,15 @@ namespace ServerInfo
             }
             return s;
         }
+
+        public static string ConcatenateStrings(IEnumerable<string> strings)
+        {
+            string s = "";
+            foreach(string str in strings)
+            {
+                s += str + ", ";
+            }
+            return s.Remove(s.Length - 2);
+        }
     }
 }

@@ -1,0 +1,71 @@
+@page "/disks"
+@using ServerInfo.Types
+@using System.IO
+@using System.Threading
+@inject HttpClient Http
+
+<h1 Style="margin-bottom: 20px">Disks</h1>
+
+@if (disks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Disk</th>
+                <th>Partitions</th>
+                <th>IOPS</th>
+                <th>Latency</th>
+                <th>Temperature</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in disks)
+            {
+                <tr>
+                    <td>@i.Name</td>
+                    <td>@Utils.ConcatenateStrings(i.Partitions)</td>
+                    <td>@i.IOPS</td>
+                    <td>@i.Latency ms</td>
+                    <td>@CheckTempSupported(i.Temperature)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Disk[] disks;
+    private Timer timer;
+    protected override async Task OnInitializedAsync()
+    {
+        disks = await Http.GetFromJsonAsync<Disk[]>("api/v1/diskinfo");
+        timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 2500, 2500);
+    }
+
+    private async void RefreshDataAsync(object stateInfo)
+    {
+        disks = await Http.GetFromJsonAsync<Disk[]>("api/v1/diskinfo");
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
+    }
+
+    private static string CheckTempSupported(int? temp)
+    {
+        if (temp.HasValue)
+        {
+            return temp + "°C";
+        }
+        else
+        {
+            return "Not supported";
+        }
+    }
+}
