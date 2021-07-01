@@ -7,29 +7,51 @@
 <h1 Style="margin-bottom: 20px">Overview</h1>
 
 The server has been running for @time.Days days, @time.Hours hours, @time.Minutes minutes and @time.Seconds seconds, or simply @time.ToString("hh':'mm':'ss")
-
+<div class="col-xl-6" Style="margin-top: 20px">
+    <h3>Average CPU usage: 0%</h3>
+    <RadzenProgressBar Value=0 Max=100 Style="margin-bottom: 20px;" />
+    
+    <h3>Average memory usage: @Utils.RemoveUnit(Utils.FromBytesToString((long)((memory.MemTotal + memory.SwapTotal) - (memory.MemAvailable + memory.SwapFree))))/@Utils.FromBytesToString((long)(memory.MemTotal + memory.SwapTotal))</h3>
+    <RadzenProgressBar Value=@memPerc Max=100 Style="margin-bottom: 20px;" />
+</div>
 
 @code {
     private UptimeInfo uptime;
+    private Timer localTimer;
+    private MemoryInfo memory;
     private Timer timer;
-
+    private int memPerc;
     TimeSpan time;
 
     protected override async Task OnInitializedAsync()
     {
         uptime = await Http.GetFromJsonAsync<UptimeInfo>("api/v1/uptimeinfo");
-        timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 500, 500);
+        await RefreshDataAsync();
         time = uptime.Uptime;
+        localTimer = new Timer(RefreshLocalDataAsync, new AutoResetEvent(true), 500, 500);
+        timer = new Timer(RefreshDataAsyncTimer, new AutoResetEvent(true), 2500, 2500);
     }
 
-    private async void RefreshDataAsync(object stateInfo)
+    private async void RefreshLocalDataAsync(object stateInfo)
     {
         time = DateTime.Now.Subtract(uptime.StartupTime);
         StateHasChanged();
     }
+    private async void RefreshDataAsyncTimer(object stateInfo)
+    {
+        RefreshDataAsync();
+        StateHasChanged();
+    }
+    private async Task RefreshDataAsync()
+    {
+        memory = await Http.GetFromJsonAsync<MemoryInfo>("api/v1/memoryinfo");
+        memPerc = (int)(((decimal)((memory.MemTotal + memory.SwapTotal) - (memory.MemAvailable + memory.SwapFree)) / (memory.MemTotal + memory.SwapTotal)) * 100);
+
+    }
 
     public void Dispose()
     {
+        localTimer.Dispose();
         timer.Dispose();
     }
 }
