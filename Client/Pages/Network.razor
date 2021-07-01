@@ -1,0 +1,55 @@
+﻿@page "/network"
+@using ServerInfo.Types
+@using System.Net.NetworkInformation
+@inject HttpClient Http
+
+<h1>Network info</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (interfaces == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Speed</th>
+                <th>Type</th>
+                <th>Sent data</th>
+                <th>Received data</th>
+                <th>Transmit throughput</th>
+                <th>Receive throughput</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in interfaces.Where(x => x.NetworkInterfaceType != NetworkInterfaceType.Loopback))
+            {
+                <tr>
+                    <td>@i.Name</td>
+                    <td>@i.OperationalStatus.ToString()</td>
+                    <td>@Utils.FromBitsToStringSpeed(i.Speed)</td>
+                    <td>@i.NetworkInterfaceType.ToString()</td>
+                    <td>@Utils.FromBytesToString((long)i.SentBytes)</td>
+                    <td>@Utils.FromBytesToString((long)i.ReceivedBytes)</td>
+                    <td>@Utils.FromBitsToStringSpeed(i.TransmitSpeed)</td>
+                    <td>@Utils.FromBitsToStringSpeed(i.ReceiveSpeed)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private AdvancedNetworkInterface[] interfaces;
+
+    protected override async Task OnInitializedAsync()
+    {
+        interfaces = await Http.GetFromJsonAsync<AdvancedNetworkInterface[]>("api/v1/networkinfo");
+    }
+
+}

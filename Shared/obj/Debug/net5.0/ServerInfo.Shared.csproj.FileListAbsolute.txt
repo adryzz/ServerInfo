@@ -1,0 +1,12 @@
+/home/adryzz/ServerInfo/Shared/bin/Debug/net5.0/ServerInfo.Shared.deps.json
+/home/adryzz/ServerInfo/Shared/bin/Debug/net5.0/ServerInfo.Shared.dll
+/home/adryzz/ServerInfo/Shared/bin/Debug/net5.0/ref/ServerInfo.Shared.dll
+/home/adryzz/ServerInfo/Shared/bin/Debug/net5.0/ServerInfo.Shared.pdb
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.csprojAssemblyReference.cache
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.AssemblyInfoInputs.cache
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.AssemblyInfo.cs
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.csproj.CoreCompileInputs.cache
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.dll
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ref/ServerInfo.Shared.dll
+/home/adryzz/ServerInfo/Shared/obj/Debug/net5.0/ServerInfo.Shared.pdb
