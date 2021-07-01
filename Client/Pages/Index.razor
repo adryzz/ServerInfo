@@ -1,7 +1,35 @@
 ﻿@page "/"
+@using ServerInfo.Types
+@using Radzen.Blazor
+@using System.Threading
+@inject HttpClient Http
 
-<h1>Hello, world!</h1>
+<h1>Overview</h1>
 
-Welcome to your new app.
+The server has been running for @time.Days days, @time.Hours hours, @time.Minutes minutes and @time.Seconds seconds, or simply @time.ToString("hh':'mm':'ss")
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+    private UptimeInfo uptime;
+    private Timer timer;
+
+    TimeSpan time;
+
+    protected override async Task OnInitializedAsync()
+    {
+        uptime = await Http.GetFromJsonAsync<UptimeInfo>("api/v1/uptimeinfo");
+        timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 500, 500);
+        time = uptime.Uptime;
+    }
+
+    private async void RefreshDataAsync(object stateInfo)
+    {
+        time = DateTime.Now.Subtract(uptime.StartupTime);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
+    }
+}
