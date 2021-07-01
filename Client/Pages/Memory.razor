@@ -1,6 +1,7 @@
 @page "/memory"
 @using ServerInfo.Types
 @using Radzen.Blazor
+@using System.Threading
 @inject HttpClient Http
 
 <h1>Memory usage</h1>
@@ -23,6 +24,7 @@ else
 
 @code {
     private MemoryInfo memory;
+    private Timer timer;
     private int ramPerc;
     private int swapPerc;
     protected override async Task OnInitializedAsync()
@@ -30,5 +32,19 @@ else
         memory = await Http.GetFromJsonAsync<MemoryInfo>("api/v1/memoryinfo");
         ramPerc = (int)(((decimal)(memory.MemTotal - memory.MemAvailable) / memory.MemTotal) * 100);
         swapPerc = (int)(((decimal)(memory.SwapTotal - memory.SwapFree) / memory.SwapTotal) * 100);
+        timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 2500, 2500);
+    }
+
+    private async void RefreshDataAsync(object stateInfo)
+    {
+        memory = await Http.GetFromJsonAsync<MemoryInfo>("api/v1/memoryinfo");
+        ramPerc = (int)(((decimal)(memory.MemTotal - memory.MemAvailable) / memory.MemTotal) * 100);
+        swapPerc = (int)(((decimal)(memory.SwapTotal - memory.SwapFree) / memory.SwapTotal) * 100);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
     }
 }
