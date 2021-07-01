@@ -1,6 +1,7 @@
 ﻿@page "/drives"
 @using ServerInfo.Types
 @using System.IO
+@using System.Threading
 @inject HttpClient Http
 
 <h1>Mounted drives</h1>
@@ -25,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var i in drives.Where(x => x.DriveType != DriveType.Ram))
+            @foreach (var i in drives.Where(x => x.DriveType == DriveType.Fixed))
             {
                 <tr>
                     <td>@i.Name</td>
@@ -42,10 +43,8 @@ else
 
 @code {
     private Drive[] drives;
-
     protected override async Task OnInitializedAsync()
     {
         drives = await Http.GetFromJsonAsync<Drive[]>("api/v1/driveinfo");
     }
-
 }

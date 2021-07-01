@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 
 namespace ServerInfo
 {
@@ -36,5 +38,18 @@ namespace ServerInfo
 
         public static string FromBitsToStringSpeed(long bitCount) => FromBitsToString(bitCount) + "ps";
         public static string FromBytesToStringSpeed(long byteCount) => FromBytesToString(byteCount) + "/s";
+    
+        public static string RemoveUnit(string data)
+        {
+            string s = "";
+            foreach(char c in data.ToCharArray())
+            {
+                if (char.IsDigit(c) || c == '.')
+                {
+                    s += c;
+                }
+            }
+            return s;
+        }
     }
 }

@@ -1,11 +1,12 @@
 ﻿@page "/network"
 @using ServerInfo.Types
 @using System.Net.NetworkInformation
+@using System.Threading
 @inject HttpClient Http
 
 <h1>Network info</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>Get information about all the network interfaces.</p>
 
 @if (interfaces == null)
 {
@@ -47,9 +48,23 @@ else
 @code {
     private AdvancedNetworkInterface[] interfaces;
 
+    private Timer timer;
+
     protected override async Task OnInitializedAsync()
     {
         interfaces = await Http.GetFromJsonAsync<AdvancedNetworkInterface[]>("api/v1/networkinfo");
+        timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 1500, 1500);
+    }
+
+    private async void RefreshDataAsync(object stateInfo)
+    {
+        interfaces = await Http.GetFromJsonAsync<AdvancedNetworkInterface[]>("api/v1/networkinfo");
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
     }
 
 }
