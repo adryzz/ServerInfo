@@ -179,5 +179,11 @@ namespace ServerInfo.API
             }
             return disks;
         }
+
+        public static IEnumerable<CPUInfo> GetCPUInfo()
+        {
+            string[] lines = File.ReadAllLines("/proc/cpuinfo");
+            return null;
+        }
     }
 }
