@@ -1,0 +1,76 @@
+@page "/cpu"
+@using ServerInfo.Types
+@using Radzen.Blazor
+@using Radzen
+@using System.Threading
+@inject HttpClient Http
+@inject NotificationService NotificationService
+
+<h1 Style="margin-bottom: 20px">CPU usage</h1>
+
+@if (cpu.AverageUsagePercentage == -1)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Vendor</th>
+                <th>Name</th>
+                <th>Frequency</th>
+                <th>Usage</th>
+                <th>Temperature</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in cpu.CPUs)
+            {
+                <tr>
+                    <td>@i.Index</td>
+                    <td>@i.Vendor</td>
+                    <td>@i.Name</td>
+                    <td>@i.Frequency MHz</td>
+                    <td>@i.UsagePercentage %</td>
+                    <td>@CheckTempSupported(i.Temperature)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private CPUInfo cpu = new CPUInfo{AverageUsagePercentage = -1};
+    private Timer timer;
+    protected override async Task OnInitializedAsync()
+    {
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "This page may not work as expected.", Detail = "Some fields are not implemented yet.", Duration = 1500 });
+        cpu = await Http.GetFromJsonAsync<CPUInfo>("api/v1/cpuinfo");
+        timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 1500, 1500);
+    }
+
+    private async void RefreshDataAsync(object stateInfo)
+    {
+        cpu = await Http.GetFromJsonAsync<CPUInfo>("api/v1/cpuinfo");
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        timer.Dispose();
+    }
+
+    private static string CheckTempSupported(int? temp)
+    {
+        if (temp.HasValue)
+        {
+            return temp + "°C";
+        }
+        else
+        {
+            return "Not supported";
+        }
+    }
+}

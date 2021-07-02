@@ -1,15 +1,17 @@
 ﻿@page "/"
 @using ServerInfo.Types
 @using Radzen.Blazor
+@using Radzen
 @using System.Threading
 @inject HttpClient Http
+@inject NotificationService NotificationService
 
 <h1 Style="margin-bottom: 20px">Overview</h1>
 
 The server has been running for @time.Days days, @time.Hours hours, @time.Minutes minutes and @time.Seconds seconds, or simply @time.ToString("hh':'mm':'ss")
 <div class="col-xl-6" Style="margin-top: 20px">
-    <h3>Average CPU usage: 0%</h3>
-    <RadzenProgressBar Value=0 Max=100 Style="margin-bottom: 20px;" />
+    <h3>Average CPU usage: @cpu.AverageUsagePercentage%</h3>
+    <RadzenProgressBar Value=@cpu.AverageUsagePercentage Max=100 Style="margin-bottom: 20px;" />
     
     <h3>Average memory usage: @Utils.RemoveUnit(Utils.FromBytesToString((long)((memory.MemTotal + memory.SwapTotal) - (memory.MemAvailable + memory.SwapFree))))/@Utils.FromBytesToString((long)(memory.MemTotal + memory.SwapTotal))</h3>
     <RadzenProgressBar Value=@memPerc Max=100 Style="margin-bottom: 20px;" />
@@ -19,6 +21,7 @@ The server has been running for @time.Days days, @time.Hours hours, @time.Minute
     private UptimeInfo uptime;
     private Timer localTimer;
     private MemoryInfo memory;
+    private CPUInfo cpu;
     private Timer timer;
     private int memPerc;
     TimeSpan time;
@@ -46,7 +49,7 @@ The server has been running for @time.Days days, @time.Hours hours, @time.Minute
     {
         memory = await Http.GetFromJsonAsync<MemoryInfo>("api/v1/memoryinfo");
         memPerc = (int)(((decimal)((memory.MemTotal + memory.SwapTotal) - (memory.MemAvailable + memory.SwapFree)) / (memory.MemTotal + memory.SwapTotal)) * 100);
-
+        cpu = await Http.GetFromJsonAsync<CPUInfo>("api/v1/cpuinfo");
     }
 
     public void Dispose()
