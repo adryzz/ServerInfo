@@ -46,7 +46,6 @@ else
     private Timer timer;
     protected override async Task OnInitializedAsync()
     {
-        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "This page may not work as expected.", Detail = "Some fields are not implemented yet.", Duration = 1500 });
         cpu = await Http.GetFromJsonAsync<CPUInfo>("api/v1/cpuinfo");
         timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 1500, 1500);
     }
