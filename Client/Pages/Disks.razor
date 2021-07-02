@@ -1,8 +1,11 @@
 @page "/disks"
 @using ServerInfo.Types
 @using System.IO
+@using Radzen.Blazor
+@using Radzen
 @using System.Threading
 @inject HttpClient Http
+@inject NotificationService NotificationService
 
 <h1 Style="margin-bottom: 20px">Disks</h1>
 
@@ -42,6 +45,7 @@ else
     private Timer timer;
     protected override async Task OnInitializedAsync()
     {
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "This page may not work as expected.", Detail = "Some fields are not implemented yet.", Duration = 1500 });
         disks = await Http.GetFromJsonAsync<Disk[]>("api/v1/diskinfo");
         timer = new Timer(RefreshDataAsync, new AutoResetEvent(true), 2500, 2500);
     }
