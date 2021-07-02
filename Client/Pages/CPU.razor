@@ -33,7 +33,7 @@ else
                     <td>@i.Vendor</td>
                     <td>@i.Name</td>
                     <td>@i.Frequency MHz</td>
-                    <td>@i.UsagePercentage %</td>
+                    <td>@Math.Round(i.UsagePercentage, 2)%</td>
                     <td>@CheckTempSupported(i.Temperature)</td>
                 </tr>
             }
