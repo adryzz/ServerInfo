@@ -8,10 +8,8 @@ namespace ServerInfo.Types
 {
     public struct CPUInfo
     {
-        public int Index { get; set; }
-        public string Vendor { get; set; }
-        public int Frequency { get; set; }
-        public int? Temperature { get; set; }
-        public int UsagePercentage { get; set; }
+        public double AverageUsagePercentage { get; set; }
+        public int? AverageTemperature { get; set; }
+        public CoreInfo[] CPUs { get; set; }
     }
 }

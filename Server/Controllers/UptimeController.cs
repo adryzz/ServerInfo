@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ServerInfo.Types;
+using ServerInfo.API.ResourceHelpers;
 
 namespace ServerInfo.API.Controllers
 {
@@ -22,7 +23,7 @@ namespace ServerInfo.API.Controllers
         [HttpGet]
         public UptimeInfo Get()
         {
-            return ResourceManager.GetUptimeInfo();
+            return UptimeHelper.GetUptimeInfo();
         }
     }
 }
